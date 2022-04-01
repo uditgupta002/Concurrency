@@ -1,32 +1,38 @@
+import java.util.concurrent.*;
+
 class HelloWorld {
     public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(10);
-        BlockingQueue<Integer> queue = new BlockingQueue(1);
-        executor.execute(new Runnable() {
+        BlockingQueue<Integer> queue = new BlockingQueue(10);
+        Thread enqueueThread = new Thread(new Runnable() {
            public void run() {
                try {
-                   for(int j = 0; j < 10; j++) {
+                   for(int j = 0; j < 11; j++) {
                        System.out.println("Enqueued : " + j);
                        queue.enqueue(j);
                    }
                } catch (InterruptedException e) {}
            } 
         });
-        executor.execute(new Runnable() {
+        Thread dequeueThread = new Thread(new Runnable() {
            public void run() {
                try{
-                   for(int j = 0; j < 101; j++) {
+                   for(int j = 0; j < 10; j++) {
                        System.out.println("Dequeued : " + queue.dequeue());
                    }
                } catch (InterruptedException e) {}
            } 
         });
-        executor.shutdown();
-        try{
-            executor.awaitTermination(600, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {}
         
-        System.out.println(queue.getSize());
+            
+        try{
+            enqueueThread.start();
+            dequeueThread.start();
+            
+            enqueueThread.join();
+            dequeueThread.join();
+        } catch(InterruptedException e) {}
+        
+        System.out.println("Final Queue Size : " + queue.getSize());
     }
 }
 
