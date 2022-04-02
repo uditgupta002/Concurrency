@@ -1,5 +1,4 @@
-import java.util.concurrent.*;
-
+@SuppressWarnings("Type Safety")
 class HelloWorld {
     public static void main(String[] args) {
         BlockingQueue<Integer> queue = new BlockingQueue(10);
@@ -30,9 +29,10 @@ class HelloWorld {
             
             enqueueThread.join();
             dequeueThread.join();
+            System.out.println("Final Queue Size : " + queue.getSize());
         } catch(InterruptedException e) {}
         
-        System.out.println("Final Queue Size : " + queue.getSize());
+        
     }
 }
 

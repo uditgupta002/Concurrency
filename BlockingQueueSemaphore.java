@@ -1,5 +1,3 @@
-import java.util.concurrent.*;
-
 class DriverProgram {
     public static void main(String[] args) {
         BlockingQueue<Integer> queue = new BlockingQueue(10);
@@ -38,6 +36,7 @@ class DriverProgram {
     }
 }
 
+@SuppressWarnings("Unchecked Type")
 class BlockingQueue<T> {
     
     T[] store;
